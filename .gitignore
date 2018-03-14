@@ -1,5 +1,7 @@
 .idea/
 config.py
+webhook_cert.pem
+webhook_pkey.pem
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
