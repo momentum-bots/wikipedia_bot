@@ -2,7 +2,9 @@
 Telegam bot for search and read articles in Instant View mode.
 http://t.me/WikipediaTelegraphBot
 
-## Run 
+## Setup & run bot 
+
+### Setup
 ```bash
 apt install mongodb
 pip3 install -r requirements.txt
@@ -29,6 +31,8 @@ Quick'n'dirty SSL certificate generation:
 
 When asked for "Common Name (e.g. server FQDN or YOUR name)" you should reply
 with the same value in you put in WEBHOOK_HOST
+
+###Run
 ```bash
 python3 bot_handlers.py #for development and tests
 ```
