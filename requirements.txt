@@ -1,0 +1,5 @@
+telebot
+pyTelegramBotApi
+flask
+pymongo
+wikipedia
