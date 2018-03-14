@@ -26,8 +26,10 @@ WEBHOOK_URL_PATH = "/%s/" % (bot_token)
 
 Quick'n'dirty SSL certificate generation:
 
-`openssl genrsa -out webhook_pkey.pem 2048`
-`openssl req -new -x509 -days 3650 -key webhook_pkey.pem -out webhook_cert.pem`
+```bash
+openssl genrsa -out webhook_pkey.pem 2048`
+openssl req -new -x509 -days 3650 -key webhook_pkey.pem -out webhook_cert.pem
+```
 
 When asked for "Common Name (e.g. server FQDN or YOUR name)" you should reply
 with the same value in you put in WEBHOOK_HOST
