@@ -3,14 +3,12 @@ Telegam bot for search and read articles in Instant View mode.
 http://t.me/WikipediaTelegraphBot
 
 ## Run 
-```
-#!bash
+```bash
 apt install mongodb
 pip3 install -r requirements.txt
 ```
 Create `config.py`:
-```
-#!python
+```python
 bot_token = '581217387:AAFEXYl21ncBJgdfVjEQBnKnGiLax6oF2M0'
 
 WEBHOOK_HOST = ''
@@ -31,12 +29,10 @@ Quick'n'dirty SSL certificate generation:
 
 When asked for "Common Name (e.g. server FQDN or YOUR name)" you should reply
 with the same value in you put in WEBHOOK_HOST
-```
-#!bash
+```bash
 python3 bot_handlers.py #for development and tests
 ```
 
-```
-#!bash
+```bash
 python3 wikipedia_server.py #for prod
 ```
