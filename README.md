@@ -11,9 +11,9 @@ pip3 install -r requirements.txt
 ```
 Create `config.py`:
 ```python
-bot_token = '581217387:AAFEXYl21ncBJgdfVjEQBnKnGiLax6oF2M0'
+bot_token = ''
 
-WEBHOOK_HOST = ''
+WEBHOOK_HOST = '' # your ip adress
 WEBHOOK_PORT = 88  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
