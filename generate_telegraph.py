@@ -1,8 +1,8 @@
 import wikipedia
-from bs4 import BeautifulSoup
-import requests
 from telegraph import Telegraph, TelegraphException
 from config import TELEGRAPH_TOKEN
+# from bs4 import BeautifulSoup
+# import requests
 
 
 # def parse_article(url, title, too_big=False) :
@@ -25,7 +25,6 @@ from config import TELEGRAPH_TOKEN
 #         content += str(p)
   
 #     return title, content
-
 
 
 def create_instant_view(content, title) :
