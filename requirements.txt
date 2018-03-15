@@ -3,3 +3,4 @@ pyTelegramBotApi
 flask
 pymongo
 wikipedia
+telegraph
