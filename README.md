@@ -12,6 +12,7 @@ pip3 install -r requirements.txt
 Create `config.py`:
 ```python
 bot_token = ''
+TELEGRAPH_TOKEN = ''
 
 WEBHOOK_HOST = '' # your ip adress
 WEBHOOK_PORT = 88  # 443, 80, 88 or 8443 (port need to be 'open')
