@@ -11,7 +11,7 @@ pip3 install -r requirements.txt
 ```
 Create `config.py`:
 ```python
-bot_token = ''
+BOT_TOKEN = ''
 TELEGRAPH_TOKEN = ''
 
 WEBHOOK_HOST = '' # your ip adress
