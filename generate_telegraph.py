@@ -81,6 +81,18 @@ def generate_by_wiki_url(url):
                 content += '<h4>{}</h4>'.format(child.get_text())
             elif child.name == 'h4':
                 content += '<h4><em>{}</em></h4'.format(child.get_text())
+            elif child.name in ['ul', 'ol']:
+                content += '<{}>'.format(child.name)
+                for li in child.children:
+                    li_text = ''
+                    if li.string is not None:
+                        content += '<li>{}</li>'.format(li.string)
+                    else:
+                        for part in li.children:
+                            if part.string is not None:
+                                li_text += part.string
+                        content += '<li>{}</li>'.format(li_text.replace('<', '< '))
+                content += '</{}>'.format(child.name)
 
     return create_instant_view(content, title)
 
