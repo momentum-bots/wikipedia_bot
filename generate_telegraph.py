@@ -1,30 +1,8 @@
 import wikipedia
+import requests
+from bs4 import BeautifulSoup
 from telegraph import Telegraph, TelegraphException
 from config import TELEGRAPH_TOKEN
-# from bs4 import BeautifulSoup
-# import requests
-
-
-# def parse_article(url, title, too_big=False) :
-#     content = ''
-#     page = requests.get(url)
-#     html = page.text
-
-#     soup = BeautifulSoup(html, 'lxml')
-#     # title = soup.find('h1', class_='entry-title').text.strip()  #title of article
-#     # article = soup.find('div', class_='td-post-content')
-#     invalid_tags = ['span', 'small', 'html', 'body', 
-#                     'head', 'sup', 'strong', 'em', 'div']
-#     for tag in invalid_tags: 
-#         for match in soup.findAll(tag):
-#             match.replaceWithChildren()
-
-#     paragraphs = soup.find_all('p')  #all useful text from article
-
-#     for p in paragraphs:
-#         content += str(p)
-  
-#     return title, content
 
 
 def create_instant_view(content, title) :
@@ -43,23 +21,26 @@ def create_instant_view(content, title) :
 
 #returns url of generated telegraph page
 def generate_by_wiki_name(name):
-    page = wikipedia.page(name.replace('_', ''))
+    wikipedia.set_lang('uk')
+    page = wikipedia.page(name.replace('_', ' '))
 
     page_content = page.content
+
+    print(page_content)
     content = ''
     for big_section in page_content.split('\n== ')[1:]:
         section_b = big_section.split(' ==\n')
-        
+
         big_title = section_b[0]
         big_section_content = section_b[1].split('\n=== ')
-        
+
         content += '<h3>' + big_title + '</h3>'
         content += '<p>' + big_section_content[0] + '</p>'
-        
+
         if len(big_section_content) > 1 :
             for medium_section in big_section_content[1:]:
                 section_m = medium_section.split(' ===\n')
-                
+
                 medium_title = section_m[0]
                 medium_section_content = section_m[1].split('\n==== ')
 
@@ -77,3 +58,21 @@ def generate_by_wiki_name(name):
                         content += '<p>' + small_section_content + '</p>'
 
         return create_instant_view(content, name)
+
+
+def generate_by_wiki_url(url):
+    page = requests.get(url)
+    html = page.text
+
+    title = url.split('/')[-1].replace('_', ' ')
+    content = ''
+
+    soup = BeautifulSoup(html, 'lxml')
+    body_content = soup.find('div', class_='mw-parser-output')
+
+    for child in body_content.children:
+        if child.name is not None:
+            if child.name == 'p':
+                content += '<p>{}</p>'.format(tag_name, child.get_text(), tag_name)
+
+    return create_instant_view(content, title)
