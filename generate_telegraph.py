@@ -72,15 +72,21 @@ def generate_by_wiki_url(url):
 
     for child in body_content.children:
         if child.name is not None:
-            if child.name == 'p':
+            #headers, telegraph supports only <h3> and <h4> header tags
+            if child.name in ['h2', 'h3', 'h4']:
+                header = child.get_text().split('[edit]')[0]
+                if child.name == 'h2':
+                    content += '<h3>{}</h3>'.format(header)
+                elif child.name == 'h3':
+                    content += '<h4>{}</h4>'.format(header)
+                elif child.name == 'h4':
+                    content += '<h4><em>{}</em></h4'.format(header)
+
+            #paragraphs
+            elif child.name == 'p':
                 content += '<p>{}</p>'.format(child.get_text())
-            #telegraph supports only <h3> and <h4> header tags
-            elif child.name == 'h2':
-                content += '<h3>{}</h3>'.format(child.get_text())
-            elif child.name == 'h3':
-                content += '<h4>{}</h4>'.format(child.get_text())
-            elif child.name == 'h4':
-                content += '<h4><em>{}</em></h4'.format(child.get_text())
+
+            #Lists
             elif child.name in ['ul', 'ol']:
                 content += '<{}>'.format(child.name)
                 for li in child.children:
