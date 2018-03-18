@@ -86,7 +86,7 @@ def generate_by_wiki_url(url):
             elif child.name == 'p':
                 content += '<p>{}</p>'.format(child.get_text())
 
-            #Lists
+            #lists
             elif child.name in ['ul', 'ol']:
                 content += '<{}>'.format(child.name)
                 for li in child.children:
@@ -99,6 +99,9 @@ def generate_by_wiki_url(url):
                                 li_text += part.string
                         content += '<li>{}</li>'.format(li_text.replace('<', '< '))
                 content += '</{}>'.format(child.name)
+
+            if child.name == 'blockquote':
+                content += '<blockquote>{}</blockquote>'.format(child.get_text())
 
     return create_instant_view(content, title)
 
