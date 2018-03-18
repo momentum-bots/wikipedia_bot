@@ -103,6 +103,9 @@ def generate_by_wiki_url(url):
             if child.name == 'blockquote':
                 content += '<blockquote>{}</blockquote>'.format(child.get_text())
 
+            if child.name == 'div' and ''.join(child['class']) == 'mw-highlightmw-content-ltr':
+                content += '<pre>{}</pre><br></br>'.format(child.get_text())
+
     return create_instant_view(content, title)
 
-# print(generate_by_wiki_url('https://en.wikipedia.org/wiki/Python_(programming_language)'))
+print(generate_by_wiki_url('https://en.wikipedia.org/wiki/Cython'))
