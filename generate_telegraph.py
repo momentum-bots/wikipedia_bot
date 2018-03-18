@@ -100,12 +100,21 @@ def generate_by_wiki_url(url):
                         content += '<li>{}</li>'.format(li_text.replace('<', '< '))
                 content += '</{}>'.format(child.name)
 
-            if child.name == 'blockquote':
+            #blockquotes
+            elif child.name == 'blockquote':
                 content += '<blockquote>{}</blockquote>'.format(child.get_text())
 
-            if child.name == 'div' and ''.join(child['class']) == 'mw-highlightmw-content-ltr':
+            #code section
+            elif child.name == 'div' and ''.join(child['class']) == 'mw-highlightmw-content-ltr':
                 content += '<pre>{}</pre><br></br>'.format(child.get_text())
+
+            #images
+            elif child.name == 'div' and child['class'] == ['thumb', 'tright']:
+                img_src = 'https://' + child.find('img')['src'][2:]
+                caption = child.find('div', class_='thumbcaption').get_text().strip()
+
+                content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
 
     return create_instant_view(content, title)
 
-print(generate_by_wiki_url('https://en.wikipedia.org/wiki/Cython'))
+# print(generate_by_wiki_url('https://en.wikipedia.org/wiki/Cython'))
