@@ -104,16 +104,18 @@ def generate_by_wiki_url(url):
             elif child.name == 'blockquote':
                 content += '<blockquote>{}</blockquote>'.format(child.get_text())
 
-            #code section
-            elif child.name == 'div' and ''.join(child['class']) == 'mw-highlightmw-content-ltr':
-                content += '<pre>{}</pre><br></br>'.format(child.get_text())
+            elif child.name == 'div':
+                if 'class' in child.attrs.keys():
+                    #code section
+                    if ''.join(child['class']) == 'mw-highlightmw-content-ltr':
+                        content += '<pre>{}</pre><br></br>'.format(child.get_text())
 
-            #images
-            elif child.name == 'div' and child['class'] == ['thumb', 'tright']:
-                img_src = 'https://' + child.find('img')['src'][2:]
-                caption = child.find('div', class_='thumbcaption').get_text().strip()
+                    #images
+                    elif child['class'] == ['thumb', 'tright']:
+                        img_src = 'https://' + child.find('img')['src'][2:]
+                        caption = child.find('div', class_='thumbcaption').get_text().strip()
 
-                content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
+                        content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
 
     return create_instant_view(content, title)
 
