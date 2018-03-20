@@ -111,7 +111,7 @@ def generate_by_wiki_url(url):
                         content += '<pre>{}</pre><br></br>'.format(child.get_text())
 
                     #images
-                    elif child['class'] == ['thumb', 'tright']:
+                    elif child['class'] in [['thumb', 'tright'], ['thumb', 'tleft']]:
                         img_src = 'https://' + child.find('img')['src'][2:]
                         caption = child.find('div', class_='thumbcaption').get_text().strip()
 
@@ -124,8 +124,8 @@ def generate_by_wiki_url(url):
     for tag in start_tags + end_tags:
         new_content = new_content.replace(tag, '')
 
-    # with open('content.html', 'w') as f:
-    #     f.write(new_content)
+    with open('content.html', 'w') as f:
+        f.write(new_content)
 
     return create_instant_view(new_content, title)
 
