@@ -16,7 +16,7 @@ def create_instant_view(content, title) :
 
     except TelegraphException :
         print('too big article')
-        pass
+        return "Haha. Looser"
 
 
 #returns url of generated telegraph page
@@ -80,7 +80,7 @@ def generate_by_wiki_url(url):
                 elif child.name == 'h3':
                     content += '<h4>{}</h4>'.format(header)
                 elif child.name == 'h4':
-                    content += '<h4><em>{}</em></h4'.format(header)
+                    content += '<h4><em>{}</em></h4>'.format(header)
 
             #paragraphs
             elif child.name == 'p':
@@ -117,6 +117,16 @@ def generate_by_wiki_url(url):
 
                         content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
 
-    return create_instant_view(content, title)
+    new_content = BeautifulSoup(content, 'lxml').prettify()
+    start_tags = ['<html>', '<head>', '<body>']
+    end_tags = [tag[0] + '/' + tag[1:] for tag in start_tags]
+
+    for tag in start_tags + end_tags:
+        new_content = new_content.replace(tag, '')
+
+    # with open('content.html', 'w') as f:
+    #     f.write(new_content)
+
+    return create_instant_view(new_content, title)
 
 # print(generate_by_wiki_url('https://en.wikipedia.org/wiki/Cython'))
