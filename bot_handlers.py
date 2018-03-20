@@ -11,9 +11,12 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     text = wikipedia.search(message.text)
-    url = 'https://en.wikipedia.org/wiki/' + text[0].replace(' ', '_')
-    print(url)
-    response = generate_telegraph.generate_by_wiki_url(url)
+    try:
+        url = 'https://en.wikipedia.org/wiki/' + text[0].replace(' ', '_')
+        print(url)
+        response = generate_telegraph.generate_by_wiki_url(url)
+    except:
+        response = 'Try again!'
     bot.send_message(message.chat.id, response)
 
 
