@@ -12,6 +12,12 @@ def add_user(id, lang='en'):
     return True
 
 
+def set_lang(id, lang):
+    user = users_db.find_one({"id": id})
+    user['lang'] = lang
+    users_db.save(user)
+
+
 def get_all_users():
     users_data = []
     for user in users_db.find():
