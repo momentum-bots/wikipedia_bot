@@ -16,7 +16,7 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     try:
-        lang = 'en'
+        lang = users_controller.get_lang(message.chat.id)
         url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
         response = generate_telegraph.generate_by_wiki_url(url)
         bot.send_message(message.chat.id, response)
@@ -26,7 +26,8 @@ def echo_all(message):
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
 def query_text(query):
-    lang = 'en'
+    user_id = query.from_user.id
+    lang = users_controller.get_lang(user_id)
     articles = []
     descriptions = []
     buttons = []
