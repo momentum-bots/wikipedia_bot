@@ -17,3 +17,7 @@ def get_all_users():
     for user in users_db.find():
         users_data.append(user)
     return users_data
+
+
+def clear_db():
+    users_db.drop()
