@@ -32,7 +32,7 @@ def generate_by_wiki_url(url):
         if child.name is not None:
             #headers, telegraph supports only <h3> and <h4> header tags
             if child.name in ['h2', 'h3', 'h4']:
-                header = child.get_text().split('[edit]')[0]
+                header = child.get_text().split('[')[0]
                 if child.name == 'h2':
                     content += '<h3>{}</h3>'.format(header)
                 elif child.name == 'h3':
