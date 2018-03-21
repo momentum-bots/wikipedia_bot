@@ -3,12 +3,11 @@ import requests
 from bs4 import BeautifulSoup
 from telegraph import Telegraph, TelegraphException
 from config import TELEGRAPH_TOKEN
+import lxml
 
 
 def create_instant_view(content, title) :
     telegraph = Telegraph(TELEGRAPH_TOKEN)
-    # too_big = False
-    # title, content = parse_article(url, title)
 
     try :
         response = telegraph.create_page(title=title, html_content=content)
@@ -16,48 +15,7 @@ def create_instant_view(content, title) :
 
     except TelegraphException :
         print('too big article')
-        return "Haha. Looser"
-
-
-#returns url of generated telegraph page
-def generate_by_wiki_name(name):
-    wikipedia.set_lang('uk')
-    page = wikipedia.page(name.replace('_', ' '))
-
-    page_content = page.content
-
-    print(page_content)
-    content = ''
-    for big_section in page_content.split('\n== ')[1:]:
-        section_b = big_section.split(' ==\n')
-
-        big_title = section_b[0]
-        big_section_content = section_b[1].split('\n=== ')
-
-        content += '<h3>' + big_title + '</h3>'
-        content += '<p>' + big_section_content[0] + '</p>'
-
-        if len(big_section_content) > 1 :
-            for medium_section in big_section_content[1:]:
-                section_m = medium_section.split(' ===\n')
-
-                medium_title = section_m[0]
-                medium_section_content = section_m[1].split('\n==== ')
-
-                content += '<h4>' + medium_title + '</h4>'
-                content += '<p>' + medium_section_content[0] + '</p>'
-
-                if len(medium_section_content) > 1:
-                    for small_section in medium_section_content[1:]:
-                        section_s = small_section.split(' ====\n')
-
-                        small_title = section_s[0]
-                        small_section_content = section_s[1]
-
-                        content += '<h4><em>' + small_title + '</em></h4>'
-                        content += '<p>' + small_section_content + '</p>'
-
-        return create_instant_view(content, name)
+        return "Haha. Loser"
 
 
 def generate_by_wiki_url(url):
@@ -112,10 +70,13 @@ def generate_by_wiki_url(url):
 
                     #images
                     elif child['class'] in [['thumb', 'tright'], ['thumb', 'tleft']]:
-                        img_src = 'https://' + child.find('img')['src'][2:]
-                        caption = child.find('div', class_='thumbcaption').get_text().strip()
+                        try:
+                            img_src = 'https://' + child.find('img')['src'][2:]
+                            caption = child.find('div', class_='thumbcaption').get_text().strip()
 
-                        content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
+                            content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
+                        except:
+                            print('no image')
 
     new_content = BeautifulSoup(content, 'lxml').prettify()
     start_tags = ['<html>', '<head>', '<body>']
@@ -124,8 +85,8 @@ def generate_by_wiki_url(url):
     for tag in start_tags + end_tags:
         new_content = new_content.replace(tag, '')
 
-    with open('content.html', 'w') as f:
-        f.write(new_content)
+    # with open('content.html', 'w') as f:
+    #     f.write(new_content)
 
     return create_instant_view(new_content, title)
 
