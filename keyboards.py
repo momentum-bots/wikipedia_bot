@@ -11,7 +11,7 @@ def create_articles_keyboard(language: str, articles: list):
 
 
 def set_lang_keyboard():
-    keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton('🇬🇧 English'))
     keyboard.add(types.KeyboardButton('🇺🇦 Українська'))
     keyboard.add(types.KeyboardButton('🇷🇺 Русский'))
