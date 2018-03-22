@@ -5,12 +5,19 @@ import re
 from telebot import types
 from time import sleep
 import users_controller
+import keyboards
 
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     users_controller.add_user(message.chat.id)
     print(message)
+
+
+@bot.message_handler(commands='set_lang')
+def set_lang(message):
+    markup = keyboards.create_lang_keyboard()
+    bot.send_message(message.chat.id, 'Choose your language:',reply_markup=markup)
 
 
 @bot.message_handler(func=lambda message: True)
