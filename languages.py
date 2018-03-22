@@ -1,5 +1,5 @@
 LANGUAGES_DICTIONARY = {
-    'ru': {
-        'back': '⬅️Назад',
-    }
+    '🇬🇧 English': 'en',
+    '🇺🇦 Українська': 'uk',
+    '🇷🇺 Русский': 'ru'
 }
