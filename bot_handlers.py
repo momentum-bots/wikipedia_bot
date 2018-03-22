@@ -23,17 +23,18 @@ def set_lang(message):
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
+    keyboard_hider = types.ReplyKeyboardRemove()
     if message.text in LANGUAGES_DICTIONARY.keys():
         users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY[message.text])
-        bot.send_message(message.chat.id, "Language was successfully updated")
+        bot.send_message(message.chat.id, "Language was successfully updated", reply_markup=keyboard_hider)
     else:
         try:
             lang = users_controller.get_lang(message.chat.id)
             url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
             response = generate_telegraph.generate_by_wiki_url(url)
-            bot.send_message(message.chat.id, response)
+            bot.send_message(message.chat.id, response, reply_markup=keyboard_hider)
         except:
-            bot.send_message(message.chat.id, 'smth went wrong')
+            bot.send_message(message.chat.id, 'smth went wrong', reply_markup=keyboard_hider)
 
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
