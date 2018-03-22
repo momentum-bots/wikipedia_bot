@@ -6,6 +6,7 @@ from telebot import types
 from time import sleep
 import users_controller
 import keyboards
+from languages import LANGUAGES_DICTIONARY
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -14,21 +15,25 @@ def send_welcome(message):
     print(message)
 
 
-@bot.message_handler(commands='set_lang')
+@bot.message_handler(commands=['set_lang'])
 def set_lang(message):
-    markup = keyboards.create_lang_keyboard()
+    markup = keyboards.set_lang_keyboard()
     bot.send_message(message.chat.id, 'Choose your language:',reply_markup=markup)
 
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    try:
-        lang = users_controller.get_lang(message.chat.id)
-        url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
-        response = generate_telegraph.generate_by_wiki_url(url)
-        bot.send_message(message.chat.id, response)
-    except:
-        bot.send_message(message.chat.id, 'smth went wrong')
+    if message.text in LANGUAGES_DICTIONARY.keys():
+        users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY[message.text])
+        bot.send_message(message.chat.id, "Language was successfully updated")
+    else:
+        try:
+            lang = users_controller.get_lang(message.chat.id)
+            url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
+            response = generate_telegraph.generate_by_wiki_url(url)
+            bot.send_message(message.chat.id, response)
+        except:
+            bot.send_message(message.chat.id, 'smth went wrong')
 
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
