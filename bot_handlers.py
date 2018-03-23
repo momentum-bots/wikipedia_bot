@@ -1,9 +1,7 @@
 from bot import bot
 import wikipedia
 import generate_telegraph
-import re
 from telebot import types
-from time import sleep
 import users_controller
 import keyboards
 import bot_methods
