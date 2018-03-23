@@ -12,22 +12,25 @@ from languages import LANGUAGES_DICTIONARY
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     users_controller.add_user(message.chat.id)
-    bot.send_message(message.chat.id, 'Hi')
+    lang = users_controller.get_lang(message.chat.id)
+    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['greeting'][lang])
     print(message)
 
 
 @bot.message_handler(commands=['set_lang'])
 def set_lang(message):
     markup = keyboards.set_lang_keyboard()
-    bot.send_message(message.chat.id, 'Choose your language:',reply_markup=markup)
+    lang = users_controller.get_lang(message.chat.id)
+    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['set_lang'][lang],reply_markup=markup)
 
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     keyboard_hider = types.ReplyKeyboardRemove()
-    if message.text in LANGUAGES_DICTIONARY.keys():
-        users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY[message.text])
-        bot.send_message(message.chat.id, "Language was successfully updated", reply_markup=keyboard_hider)
+    if message.text in LANGUAGES_DICTIONARY['keyboard'].keys():
+        users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY['keyboard'][message.text])
+        lang = users_controller.get_lang(message.chat.id)
+        bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['changed_lang'][lang], reply_markup=keyboard_hider)
     else:
         try:
             lang = users_controller.get_lang(message.chat.id)
@@ -51,7 +54,7 @@ def query_text(query):
         if 'disambiguation' not in article:
             articles.append(article)
 
-    for i, article in enumerate(articles):
+    for i, article in enumerate(articles[:2]):
         buttons.append(types.InlineQueryResultArticle(
                        id=str(i), title=article,
                        description='test',
