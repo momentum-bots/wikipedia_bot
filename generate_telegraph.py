@@ -41,6 +41,13 @@ def generate_by_wiki_url(url):
     soup = BeautifulSoup(html, 'lxml')
     body_content = soup.find('div', class_='mw-parser-output')
 
+    try:
+        main_photo = body_content.find('table', class_='infobox').find('a', class_='image').find('img')['src']
+        img_src = 'https://' + main_photo[2:]
+        content += "<img src='{}'></img>".format(img_src)
+    except:
+        pass
+
     for child in body_content.children:
         if child.name is not None:
             #headers, telegraph supports only <h3> and <h4> header tags
