@@ -6,10 +6,11 @@ from telebot import types
 from time import sleep
 import users_controller
 import keyboards
+import bot_methods
 from languages import LANGUAGES_DICTIONARY
 
 
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start'])
 def send_welcome(message):
     users_controller.add_user(message.chat.id)
     lang = users_controller.get_lang(message.chat.id)
@@ -59,7 +60,7 @@ def query_text(query):
                        id=str(i), title=article,
                        description='test',
                        input_message_content=types.InputTextMessageContent(article),
-                       thumb_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEaF0CsI_3jjaTkV1Cv3f-WD4evU8EFuqcTUH8_-Fpcrkwo57kQA',
+                       thumb_url=bot_methods.get_photo_url(article, lang),
                        thumb_width=48,
                        thumb_height=48
         ))
