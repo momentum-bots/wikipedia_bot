@@ -12,6 +12,7 @@ from languages import LANGUAGES_DICTIONARY
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     users_controller.add_user(message.chat.id)
+    bot.send_message(message.chat.id, 'Hi')
     print(message)
 
 
@@ -54,7 +55,10 @@ def query_text(query):
         buttons.append(types.InlineQueryResultArticle(
                        id=str(i), title=article,
                        description='test',
-                       input_message_content=types.InputTextMessageContent(article)
+                       input_message_content=types.InputTextMessageContent(article),
+                       thumb_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEaF0CsI_3jjaTkV1Cv3f-WD4evU8EFuqcTUH8_-Fpcrkwo57kQA',
+                       thumb_width=48,
+                       thumb_height=48
         ))
     try:
         bot.answer_inline_query(query.id, buttons)
