@@ -35,9 +35,9 @@ def echo_all(message):
     else:
         try:
             lang = users_controller.get_lang(message.chat.id)
-        url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
-        response = generate_telegraph.generate_by_wiki_url(url)
-        bot.send_message(message.chat.id, response, reply_markup=keyboard_hider)
+            url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
+            response = generate_telegraph.generate_by_wiki_url(url)
+            bot.send_message(message.chat.id, response, reply_markup=keyboard_hider)
         except:
             bot.send_message(message.chat.id, 'Try again..', reply_markup=keyboard_hider)
 
