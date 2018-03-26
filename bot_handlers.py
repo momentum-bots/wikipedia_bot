@@ -6,6 +6,8 @@ import users_controller
 import keyboards
 import bot_methods
 from languages import LANGUAGES_DICTIONARY
+import threading
+from queue import Queue
 
 
 @bot.message_handler(commands=['start'])
@@ -33,17 +35,16 @@ def echo_all(message):
     else:
         try:
             lang = users_controller.get_lang(message.chat.id)
-            url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
-            response = generate_telegraph.generate_by_wiki_url(url)
-            bot.send_message(message.chat.id, response, reply_markup=keyboard_hider)
+        url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
+        response = generate_telegraph.generate_by_wiki_url(url)
+        bot.send_message(message.chat.id, response, reply_markup=keyboard_hider)
         except:
-            bot.send_message(message.chat.id, 'smth went wrong', reply_markup=keyboard_hider)
+            bot.send_message(message.chat.id, 'Try again..', reply_markup=keyboard_hider)
 
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
 def query_text(query):
-    user_id = query.from_user.id
-    lang = users_controller.get_lang(user_id)
+    lang = users_controller.get_lang(query.from_user.id)
     articles = []
     descriptions = []
     buttons = []
@@ -53,19 +54,23 @@ def query_text(query):
         if 'disambiguation' not in article:
             articles.append(article)
 
-    for i, article in enumerate(articles[:2]):
-        buttons.append(types.InlineQueryResultArticle(
-                       id=str(i), title=article,
-                       description='test',
-                       input_message_content=types.InputTextMessageContent(article),
-                       thumb_url=bot_methods.get_photo_url(article, lang),
-                       thumb_width=48,
-                       thumb_height=48
-        ))
+    queue = Queue()
+    threads = []
+    print(articles)
+    for i, article in enumerate(articles[:5]):
+        threads.append(threading.Thread(target=bot_methods.add_button,
+                                        args=(article, i, lang, queue)))
+
+    print(threads)
+    for thread in threads[:5]:
+        thread.start()
+
+    for thread in threads[:5]:
+        buttons.append(queue.get())
     try:
         bot.answer_inline_query(query.id, buttons)
-    except:
-        print('fuck')
+    except Exception as e:
+        print('[Error] {}'.format(e))
         return
 
 
