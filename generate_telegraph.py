@@ -1,9 +1,9 @@
 import wikipedia
-import requests
 from bs4 import BeautifulSoup
 from telegraph import Telegraph, TelegraphException
 from config import TELEGRAPH_TOKEN
 import lxml
+import bot_methods
 
 WIKI_URL = 'https://en.wikipedia.org'
 
@@ -32,21 +32,12 @@ def create_instant_view(content, title) :
 
 
 def generate_by_wiki_url(url):
-    page = requests.get(url)
-    html = page.text
+    body_content, title = bot_methods.parse_article(url)
 
-    title = url.split('/')[-1].replace('_', ' ')
     content = ''
-
-    soup = BeautifulSoup(html, 'lxml')
-    body_content = soup.find('div', class_='mw-parser-output')
-
-    try:
-        main_photo = body_content.find('table', class_='infobox').find('a', class_='image').find('img')['src']
-        img_src = 'https://' + main_photo[2:]
-        content += "<img src='{}'></img>".format(img_src)
-    except:
-        pass
+    img_url = bot_methods.parse_main_photo(body_content=body_content)
+    if img_url is not None:
+        content += "<img src='{}'></img>".format(img_url)
 
     for child in body_content.children:
         if child.name is not None:
@@ -101,7 +92,7 @@ def generate_by_wiki_url(url):
                     #images
                     elif child['class'] in [['thumb', 'tright'], ['thumb', 'tleft']]:
                         try:
-                            img_src = 'https://' + child.find('img')['src'][2:]
+                            img_src = 'https:' + child.find('img')['src']
                             caption = child.find('div', class_='thumbcaption').get_text().strip()
 
                             content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
@@ -109,9 +100,6 @@ def generate_by_wiki_url(url):
                             print('no image')
 
     new_content = make_pretty(content)
-
-    with open('content.html', 'w') as f:
-        f.write(new_content)
 
     return create_instant_view(new_content, title)
 
