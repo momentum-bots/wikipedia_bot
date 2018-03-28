@@ -5,6 +5,7 @@ from config import TELEGRAPH_TOKEN
 import lxml
 import bot_methods
 
+
 WIKI_URL = 'https://en.wikipedia.org'
 
 
@@ -18,17 +19,17 @@ def make_pretty(content):
     return new_content
 
 
-def create_instant_view(content, title) :
+def create_instant_view(content, title, too_big=False) :
     telegraph = Telegraph(TELEGRAPH_TOKEN)
 
     try :
         response = telegraph.create_page(title=title, html_content=content)
-        return response['url']  #url of created telegraph page
+        return response['url'], too_big  #url of created telegraph page
 
     except TelegraphException :
-        new_content = "<h".join(content.split('<h')[:-1])
+        new_content = "<h".join(content.split('<h')[:-1]) + "<br></br><aside>Сделано ботом <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"
         print('too big article')
-        return create_instant_view(make_pretty(new_content), title)
+        return create_instant_view(make_pretty(new_content), title, too_big=True)
 
 
 def generate_by_wiki_url(url):
@@ -99,9 +100,21 @@ def generate_by_wiki_url(url):
                         except:
                             print('no image')
 
+
+
+    content += "<hr></hr><aside>Сделано ботом <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"
+
     new_content = make_pretty(content)
 
+    # page_url, too_big = create_instant_view(new_content, title)
+    # while(too_big):
+    #     telegraph = Telegraph(TELEGRAPH_TOKEN)
+    #     page = telegraph.get_page(page_url.split('/')[-1], return_html=True)['content']
+    #     find = page[::-1][:20][::-1].replace('<', '\n  <')
+    # #     # print(len(content.split(find)))
+    # #     print(find)
+    #
+    #     page_url, too_big = create_instant_view(new_content.split(find)[1], title)
+    #     print(page_url)
+
     return create_instant_view(new_content, title)
-
-
-# print(generate_by_wiki_url('https://en.wikipedia.org/wiki/Cython'))
