@@ -17,3 +17,8 @@ LANGUAGES_DICTIONARY = {
                  'ru': 'Выберите язык:'
                 }
 }
+
+
+help_message = """This bot can work in your chats and groups, you just need to add it there. Then type @WikipediaTelegraphBot in any chat with your query. This will open a panel with Wikipedia article suggestions. Tap on an item and bot will generate Telegraph page for you!
+
+You can change language of articles anytime  by sending /set_lang command to bot."""

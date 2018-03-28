@@ -5,7 +5,7 @@ from telebot import types
 import users_controller
 import keyboards
 import bot_methods
-from languages import LANGUAGES_DICTIONARY
+from languages import LANGUAGES_DICTIONARY, help_message
 import threading
 from queue import Queue
 
@@ -16,6 +16,11 @@ def send_welcome(message):
     lang = users_controller.get_lang(message.chat.id)
     bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['greeting'][lang])
     print(message)
+
+
+@bot.message_handler(commands=['help'])
+def help(message):
+    bot.send_message(message.chat.id, help_message)
 
 
 @bot.message_handler(commands=['set_lang'])
