@@ -23,7 +23,7 @@ def help(message):
     bot.send_message(message.chat.id, help_message)
 
 
-@bot.message_handler(commands=['set_lang'])
+@bot.message_handler(commands=['set_language'])
 def set_lang(message):
     markup = keyboards.set_lang_keyboard()
     lang = users_controller.get_lang(message.chat.id)
