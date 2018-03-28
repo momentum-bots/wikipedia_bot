@@ -8,6 +8,7 @@ import bot_methods
 from languages import LANGUAGES_DICTIONARY, help_message
 import threading
 from queue import Queue
+from time import sleep
 
 
 @bot.message_handler(commands=['start'])
@@ -20,11 +21,17 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def help(message):
+    users_controller.add_user(message.chat.id)
     bot.send_message(message.chat.id, help_message)
+    sleep(1)
+    bot.send_photo(message.chat.id, open('example1.jpg', 'rb'))
+    sleep(1)
+    bot.send_photo(message.chat.id, open('example2.jpg', 'rb'))
 
 
 @bot.message_handler(commands=['set_language'])
 def set_lang(message):
+    users_controller.add_user(message.chat.id)
     markup = keyboards.set_lang_keyboard()
     lang = users_controller.get_lang(message.chat.id)
     bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['set_lang'][lang],reply_markup=markup)
@@ -32,6 +39,7 @@ def set_lang(message):
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
+    users_controller.add_user(message.chat.id)
     keyboard_hider = types.ReplyKeyboardRemove()
     if message.text in LANGUAGES_DICTIONARY['keyboard'].keys():
         users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY['keyboard'][message.text])
@@ -49,6 +57,7 @@ def echo_all(message):
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
 def query_text(query):
+    users_controller.add_user(query.from_user.id)
     lang = users_controller.get_lang(query.from_user.id)
     articles = []
     descriptions = []
