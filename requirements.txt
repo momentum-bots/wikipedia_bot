@@ -4,3 +4,6 @@ flask
 pymongo
 wikipedia
 telegraph
+requests
+bs4
+

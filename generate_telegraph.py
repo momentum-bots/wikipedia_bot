@@ -1,9 +1,10 @@
 import wikipedia
-import requests
 from bs4 import BeautifulSoup
 from telegraph import Telegraph, TelegraphException
 from config import TELEGRAPH_TOKEN
 import lxml
+import bot_methods
+
 
 WIKI_URL = 'https://en.wikipedia.org'
 
@@ -18,35 +19,26 @@ def make_pretty(content):
     return new_content
 
 
-def create_instant_view(content, title) :
+def create_instant_view(content, title, too_big=False) :
     telegraph = Telegraph(TELEGRAPH_TOKEN)
 
     try :
         response = telegraph.create_page(title=title, html_content=content)
         return response['url']  # url of created telegraph page
 
-    except TelegraphException :
-        new_content = "<h".join(content.split('<h')[:-1])
+    except TelegraphException:
+        new_content = "<h".join(content.split('<h')[:-1]) + "<br></br><aside>Сделано ботом <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"
         print('too big article')
-        return create_instant_view(make_pretty(new_content), title)
+        return create_instant_view(make_pretty(new_content), title, too_big=True)
 
 
 def generate_by_wiki_url(url):
-    page = requests.get(url)
-    html = page.text
+    body_content, title = bot_methods.parse_article(url)
 
-    title = url.split('/')[-1].replace('_', ' ')
     content = ''
-
-    soup = BeautifulSoup(html, 'lxml')
-    body_content = soup.find('div', class_='mw-parser-output')
-
-    try:
-        main_photo = body_content.find('table', class_='infobox').find('a', class_='image').find('img')['src']
-        img_src = 'https://' + main_photo[2:]
-        content += "<img src='{}'></img>".format(img_src)
-    except:
-        pass
+    img_url = bot_methods.parse_main_photo(body_content=body_content)
+    if img_url is not None:
+        content += "<img src='{}'></img>".format(img_url)
 
     for child in body_content.children:
         if child.name is not None:
@@ -101,19 +93,28 @@ def generate_by_wiki_url(url):
                     #images
                     elif child['class'] in [['thumb', 'tright'], ['thumb', 'tleft']]:
                         try:
-                            img_src = 'https://' + child.find('img')['src'][2:]
+                            img_src = 'https:' + child.find('img')['src']
                             caption = child.find('div', class_='thumbcaption').get_text().strip()
 
                             content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
                         except:
                             print('no image')
 
+
+
+    content += "<hr></hr><aside>Сделано ботом <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"
+
     new_content = make_pretty(content)
 
-    with open('content.html', 'w') as f:
-        f.write(new_content)
+    # page_url, too_big = create_instant_view(new_content, title)
+    # while(too_big):
+    #     telegraph = Telegraph(TELEGRAPH_TOKEN)
+    #     page = telegraph.get_page(page_url.split('/')[-1], return_html=True)['content']
+    #     find = page[::-1][:20][::-1].replace('<', '\n  <')
+    # #     # print(len(content.split(find)))
+    # #     print(find)
+    #
+    #     page_url, too_big = create_instant_view(new_content.split(find)[1], title)
+    #     print(page_url)
 
     return create_instant_view(new_content, title)
-
-
-# print(generate_by_wiki_url('https://en.wikipedia.org/wiki/Cython'))
