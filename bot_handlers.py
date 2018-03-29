@@ -5,7 +5,7 @@ from telebot import types
 import users_controller
 import keyboards
 import bot_methods
-from languages import LANGUAGES_DICTIONARY, help_message
+from languages import LANGUAGES_DICTIONARY
 import threading
 from queue import Queue
 from time import sleep
@@ -22,7 +22,8 @@ def send_welcome(message):
 @bot.message_handler(commands=['help'])
 def help(message):
     users_controller.add_user(message.chat.id)
-    bot.send_message(message.chat.id, help_message)
+    lang = users_controller.get_lang(message.chat.id)
+    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['help_message'][lang])
     sleep(1)
     bot.send_photo(message.chat.id, open('example1.jpg', 'rb'))
     sleep(1)
