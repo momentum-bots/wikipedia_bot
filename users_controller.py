@@ -1,8 +1,8 @@
 from db import users_db
 
 
-def add_user(id, lang='en'):
-    user = {'id': id,
+def add_user(id_, lang='en'):
+    user = {'id': id_,
             'lang': lang
             }
     if users_db.find_one({"id": user['id']}) is None:
@@ -12,14 +12,14 @@ def add_user(id, lang='en'):
     return True
 
 
-def set_lang(id, lang):
-    user = users_db.find_one({"id": id})
+def set_lang(id_, lang):
+    user = users_db.find_one({"id": id_})
     user['lang'] = lang
     users_db.save(user)
 
 
-def get_lang(id):
-    user = users_db.find_one({"id": id})
+def get_lang(id_):
+    user = users_db.find_one({"id": id_})
     return user['lang']
 
 

@@ -23,7 +23,7 @@ def create_instant_view(content, title) :
 
     try :
         response = telegraph.create_page(title=title, html_content=content)
-        return response['url']  #url of created telegraph page
+        return response['url']  # url of created telegraph page
 
     except TelegraphException :
         new_content = "<h".join(content.split('<h')[:-1])

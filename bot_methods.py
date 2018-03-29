@@ -15,8 +15,8 @@ def get_photo_url(article, lang):
         images = [image for image in page.images if 'jpg' in image]
         if images:
             return images[0]
-    except:
-        pass
+    except Exception as e:
+        print('[Exception] {}'.format(e))
     return WIKI_PHOTO
 
 
