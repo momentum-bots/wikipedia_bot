@@ -13,18 +13,18 @@ from time import sleep
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    users_controller.add_user(message.chat.id)
-    lang = users_controller.get_lang(message.chat.id)
+    users_controller.add_user(message.from_user.id)
+    lang = users_controller.get_lang(message.from_user.id)
     bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['greeting'][lang])
     print(message)
 
 
 @bot.message_handler(commands=['help'])
 def help(message):
-    users_controller.add_user(message.chat.id)
-    lang = users_controller.get_lang(message.chat.id)
+    users_controller.add_user(message.from_user.id)
+    lang = users_controller.get_lang(message.from_user.id)
     bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['help_message'][lang])
-    sleep(1)
+    sleep(3)
     bot.send_photo(message.chat.id, open('example1.jpg', 'rb'))
     sleep(1)
     bot.send_photo(message.chat.id, open('example2.jpg', 'rb'))
@@ -32,23 +32,27 @@ def help(message):
 
 @bot.message_handler(commands=['set_language'])
 def set_lang(message):
-    users_controller.add_user(message.chat.id)
+    users_controller.add_user(message.from_user.id)
     markup = keyboards.set_lang_keyboard()
-    lang = users_controller.get_lang(message.chat.id)
-    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['set_lang'][lang],reply_markup=markup)
+    lang = users_controller.get_lang(message.from_user.id)
+    bot.send_message(message.from_user.id,
+                     LANGUAGES_DICTIONARY['set_lang'][lang],
+                     reply_markup=markup)
 
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    users_controller.add_user(message.chat.id)
+    users_controller.add_user(message.from_user.id)
     keyboard_hider = types.ReplyKeyboardRemove()
     if message.text in LANGUAGES_DICTIONARY['keyboard'].keys():
-        users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY['keyboard'][message.text])
-        lang = users_controller.get_lang(message.chat.id)
-        bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['changed_lang'][lang], reply_markup=keyboard_hider)
+        users_controller.set_lang(message.from_user.id, LANGUAGES_DICTIONARY['keyboard'][message.text])
+        lang = users_controller.get_lang(message.from_user.id)
+        bot.send_message(message.chat.id,
+                         LANGUAGES_DICTIONARY['changed_lang'][lang],
+                         reply_markup=keyboard_hider)
     else:
         try:
-            lang = users_controller.get_lang(message.chat.id)
+            lang = users_controller.get_lang(message.from_user.id)
             url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
             response = generate_telegraph.generate_by_wiki_url(url)
             bot.send_message(message.chat.id, response, reply_markup=keyboard_hider)
@@ -82,6 +86,7 @@ def query_text(query):
 
     for thread in threads[:5]:
         buttons.append(queue.get())
+
     try:
         bot.answer_inline_query(query.id, buttons)
     except Exception as e:
