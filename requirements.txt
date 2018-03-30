@@ -6,4 +6,4 @@ wikipedia
 telegraph
 requests
 bs4
-
+lxml
