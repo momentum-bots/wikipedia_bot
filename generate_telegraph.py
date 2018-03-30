@@ -4,6 +4,7 @@ from telegraph import Telegraph, TelegraphException
 from config import TELEGRAPH_TOKEN
 import lxml
 import bot_methods
+from languages import LANGUAGES_DICTIONARY
 
 
 WIKI_URL = 'https://en.wikipedia.org'
@@ -32,7 +33,7 @@ def create_instant_view(content, title, too_big=False) :
         return create_instant_view(make_pretty(new_content), title, too_big=True)
 
 
-def generate_by_wiki_url(url):
+def generate_by_wiki_url(url, lang):
     body_content, title = bot_methods.parse_article(url)
 
     content = ''
@@ -102,7 +103,8 @@ def generate_by_wiki_url(url):
 
 
 
-    content += "<hr></hr><aside>Сделано ботом <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"
+    content += "<hr></hr><aside>{} <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"\
+                .format(LANGUAGES_DICTIONARY['created_by'][lang])
 
     new_content = make_pretty(content)
 

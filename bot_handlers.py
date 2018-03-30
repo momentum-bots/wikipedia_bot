@@ -7,6 +7,8 @@ from keyboards import KeyboardManager
 import bot_methods
 from languages import LANGUAGES_DICTIONARY
 from time import sleep
+import threading
+from queue import Queue
 
 
 @bot.message_handler(commands=['start'])
@@ -48,7 +50,7 @@ def echo_all(message):
         try:
             lang = users_controller.get_lang(message.from_user.id)
             url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
-            response = generate_telegraph.generate_by_wiki_url(url)
+            response = generate_telegraph.generate_by_wiki_url(url, lang)
             bot.send_message(message.chat.id, response, reply_markup=KeyboardManager.search_keyboard)
         except Exception as e:
             print('[Exception] {}'.format(e))
@@ -67,15 +69,19 @@ def query_text(query):
         if 'disambiguation' not in article:
             articles.append(article)
 
-    for i, article in enumerate(articles[:2]):
-        buttons.append(types.InlineQueryResultArticle(
-                       id=str(i), title=article,
-                       description='test',
-                       input_message_content=types.InputTextMessageContent(article),
-                       thumb_url=bot_methods.get_photo_url(article, lang),
-                       thumb_width=48,
-                       thumb_height=48)
-                       )
+    queue = Queue()
+    threads = []
+    print(articles)
+    for i, article in enumerate(articles[:5]):
+        threads.append(threading.Thread(target=bot_methods.add_button,
+                                        args=(article, i, lang, queue)))
+
+    print(threads)
+    for thread in threads[:5]:
+        thread.start()
+
+    for thread in threads[:5]:
+        buttons.append(queue.get())
     try:
         bot.answer_inline_query(query.id, buttons)
     except Exception as e:
