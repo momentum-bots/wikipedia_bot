@@ -54,7 +54,7 @@ def echo_all(message):
             bot.send_message(message.chat.id, response, reply_markup=KeyboardManager.search_keyboard)
         except Exception as e:
             print('[Exception] {}'.format(e))
-            bot.send_message(message.chat.id, 'Server-side error (sorry)', reply_markup=types.ReplyKeyboardRemove())
+            bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['wrong_article'][lang], reply_markup=types.ReplyKeyboardRemove())
 
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
