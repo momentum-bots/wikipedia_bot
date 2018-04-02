@@ -1,6 +1,6 @@
 import pymongo
+from config import CONFIG_URI
 
-config_uri = "mongodb://localhost/wiki_bot"
-client = pymongo.MongoClient(config_uri)
+client = pymongo.MongoClient(CONFIG_URI)
 
 users_db = client.get_database()["users_db"]
