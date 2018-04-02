@@ -90,6 +90,7 @@ def query_text(query):
 
 
 def start_bot():
+    bot.remove_webhook()
     bot.polling(none_stop=True)
 
 
