@@ -5,7 +5,7 @@ from languages import LANGUAGES_DICTIONARY
 class KeyboardManager(object):
 
     search_keyboard = types.InlineKeyboardMarkup()
-    switch_button = types.InlineKeyboardButton(text="Search wiki article", switch_inline_query_current_chat="")
+    switch_button = types.InlineKeyboardButton(text="Search Wikipedia article", switch_inline_query_current_chat="")
     search_keyboard.add(switch_button)
 
     @staticmethod
