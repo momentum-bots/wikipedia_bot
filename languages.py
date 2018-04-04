@@ -12,9 +12,9 @@ LANGUAGES_DICTIONARY = {
                       'uk': 'У Вікіпедії немає такої статті. Спробуй знову!',
                       'ru': 'В Википедии нет такой статьи. Попробуй снова!'
                      },
-    'set_lang': {'en': 'Choose your language:',
-                 'uk': 'Виберіть мову:',
-                 'ru': 'Выберите язык:'
+    'set_lang': {'en': 'Choose your language: \n(you can change it any time sending /set_language)',
+                 'uk': 'Виберіть мову: \n(її можна змінити у будь-який момент, надіславши /set_language)',
+                 'ru': 'Выберите язык: \n(его можно изменить в любой момент, отправив /set_language)'
                 },
     'wrong_article': {'en': 'There is no such article. Try again 🤔',
                       'uk': 'Немає такої статті. Спробуй знову 🤔',
@@ -24,6 +24,10 @@ LANGUAGES_DICTIONARY = {
                    'uk': 'Зроблено ботом',
                    'ru': 'Сделано ботом'
                   },
+    'search': {'en': 'Search',
+               'uk': 'Пошук',
+               'ru': 'Поиск'
+               },
     'help_message': {'en': """This bot can work in your chats, you just need to add it there as a new member. Then call bot by typing its nickname: @WikipediaTelegraphBot in any chat with your query. This will open a panel with Wikipedia article hints. Tap on an item and bot will generate Telegraph page for you!
 
 You can change language of articles anytime  by sending /set_language command to bot.""",

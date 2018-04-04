@@ -4,9 +4,12 @@ from languages import LANGUAGES_DICTIONARY
 
 class KeyboardManager(object):
 
-    search_keyboard = types.InlineKeyboardMarkup()
-    switch_button = types.InlineKeyboardButton(text="Search Wikipedia article", switch_inline_query_current_chat="")
-    search_keyboard.add(switch_button)
+    @staticmethod
+    def get_search_keyboard(button_text: str):
+        search_keyboard = types.InlineKeyboardMarkup()
+        switch_button = types.InlineKeyboardButton(text=button_text, switch_inline_query_current_chat="")
+        search_keyboard.add(switch_button)
+        return search_keyboard
 
     @staticmethod
     def create_articles_keyboard(language: str, articles: list):

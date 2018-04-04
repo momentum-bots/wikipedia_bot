@@ -15,9 +15,13 @@ from queue import Queue
 def send_welcome(message):
     users_controller.add_user(message.chat.id)
     lang = users_controller.get_lang(message.chat.id)
+    text_button = LANGUAGES_DICTIONARY['search'][lang]
     bot.send_message(message.chat.id,
                      LANGUAGES_DICTIONARY['greeting'][lang],
-                     reply_markup=KeyboardManager.search_keyboard)
+                     reply_markup=KeyboardManager.get_search_keyboard(text_button))
+    bot.send_message(message.chat.id,
+                     LANGUAGES_DICTIONARY['set_lang'][lang],
+                     reply_markup=KeyboardManager.set_lang_keyboard())
     print(message)
 
 
@@ -26,16 +30,17 @@ def help(message):
     users_controller.add_user(message.from_user.id)
     lang = users_controller.get_lang(message.from_user.id)
     bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['help_message'][lang])
-    sleep(3)
-    bot.send_photo(message.chat.id, open('example1.jpg', 'rb'))
-    sleep(1)
-    bot.send_photo(message.chat.id, open('example2.jpg', 'rb'))
+    # sleep(3)
+    # bot.send_photo(message.chat.id, open('images/example1.jpg', 'rb'))
+    # sleep(1)
+    # bot.send_photo(message.chat.id, open('images/example2.jpg', 'rb'))
 
 
 @bot.message_handler(commands=['set_language'])
 def set_lang(message):
     lang = users_controller.get_lang(message.chat.id)
-    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['set_lang'][lang],reply_markup=KeyboardManager.set_lang_keyboard())
+    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['set_lang'][lang],
+                     reply_markup=KeyboardManager.set_lang_keyboard())
 
 
 @bot.message_handler(func=lambda message: True)
@@ -51,7 +56,8 @@ def echo_all(message):
             lang = users_controller.get_lang(message.from_user.id)
             url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
             response = generate_telegraph.generate_by_wiki_url(url, lang)
-            bot.send_message(message.chat.id, response, reply_markup=KeyboardManager.search_keyboard)
+            text_button = LANGUAGES_DICTIONARY['search'][lang]
+            bot.send_message(message.chat.id, response, reply_markup=KeyboardManager.get_search_keyboard(text_button))
         except Exception as e:
             print('[Exception] {}'.format(e))
             bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['wrong_article'][lang], reply_markup=types.ReplyKeyboardRemove())
