@@ -75,7 +75,7 @@ def query_empty_text(query):
                 input_message_content=types.InputTextMessageContent(
                 message_text="🌚🌝")
         )
-    bot.answer_inline_query(query.id, [r])
+    bot.answer_inline_query(query.id, [r], cache_time=10)
 
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
