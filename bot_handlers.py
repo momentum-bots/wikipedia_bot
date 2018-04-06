@@ -71,9 +71,9 @@ def query_empty_text(query):
     r = types.InlineQueryResultArticle(
                 id='1',
                 title=LANGUAGES_DICTIONARY['hint'][lang],
-                description=LANGUAGES_DICTIONARY['hint_desc'][lang]
-                # input_message_content=types.InputTextMessageContent(
-                # message_text="C'mon")
+                description=LANGUAGES_DICTIONARY['hint_desc'][lang],
+                input_message_content=types.InputTextMessageContent(
+                message_text="🌚🌝")
         )
     bot.answer_inline_query(query.id, [r])
 
