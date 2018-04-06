@@ -63,6 +63,21 @@ def echo_all(message):
             bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['wrong_article'][lang], reply_markup=types.ReplyKeyboardRemove())
 
 
+@bot.inline_handler(func=lambda query: len(query.query) == 0)
+def query_empty_text(query):
+    users_controller.add_user(query.from_user.id)
+    lang = users_controller.get_lang(query.from_user.id)
+    print('kek')
+    r = types.InlineQueryResultArticle(
+                id='1',
+                title=LANGUAGES_DICTIONARY['hint'][lang],
+                description=LANGUAGES_DICTIONARY['hint_desc'][lang]
+                # input_message_content=types.InputTextMessageContent(
+                # message_text="C'mon")
+        )
+    bot.answer_inline_query(query.id, [r])
+
+
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
 def query_text(query):
     users_controller.add_user(query.from_user.id)
