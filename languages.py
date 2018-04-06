@@ -37,8 +37,8 @@ LANGUAGES_DICTIONARY = {
              'ru': 'Введите поисковой запрос'
             },
     'hint_desc': {'en': "(Do not delete bot's name 😮)",
-                  'uk': "(Не видаліть нікнейм бота 😮)",
-                  'ru': "(Не удалите никнейм бота 😮)"
+                  'uk': "(Не видаляйте нікнейм бота 😮)",
+                  'ru': "(Не удаляйте никнейм бота 😮)"
                  },
     'help_message': {'en': """This bot can work in your chats, you just need to add it there as a new member. Then call bot by typing its nickname: @WikipediaTelegraphBot in any chat with your query. This will open a panel with Wikipedia article hints. Tap on an item and bot will generate Telegraph page for you!
 
