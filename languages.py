@@ -28,6 +28,14 @@ LANGUAGES_DICTIONARY = {
                'uk': 'Пошук',
                'ru': 'Поиск'
                },
+    'formula': {'en': 'Formula',
+                'uk': 'Формула',
+                'ru': 'Формула'
+               },
+    'hint': {'en': 'Enter search query:',
+             'uk': 'Введіть пошуковий запит:',
+             'ru': 'Введите поисковой запрос'
+            },
     'help_message': {'en': """This bot can work in your chats, you just need to add it there as a new member. Then call bot by typing its nickname: @WikipediaTelegraphBot in any chat with your query. This will open a panel with Wikipedia article hints. Tap on an item and bot will generate Telegraph page for you!
 
 You can change language of articles anytime  by sending /set_language command to bot.""",
