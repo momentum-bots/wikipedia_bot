@@ -43,6 +43,16 @@ def generate_by_wiki_url(url, lang):
 
     for child in body_content.children:
         if child.name is not None:
+
+            if child.name == 'dl':
+                try:
+                    urls = child.find_all('img', class_='mwe-math-fallback-image-inline')
+                    for url in urls:
+                        content += "<img src='{}'></img>".format(url['src'])
+                        print(url['src'])
+                except:
+                    print('ne vyshlo')
+
             #headers, telegraph supports only <h3> and <h4> header tags
             if child.name in ['h2', 'h3', 'h4']:
                 header = child.get_text().split('[')[0]
@@ -55,17 +65,48 @@ def generate_by_wiki_url(url, lang):
 
             #paragraphs
             elif child.name == 'p':
-                content += '<p>{}</p>'.format(child.get_text())
+                # try:
+                # paragraph = ''
                 # for p_child in child.children:
-                #     if p_child.name in ['sup', 'span', 'tt']:
-                #         p += p_child.get_text()
-                #     else:
-                #         if p_child.name == 'a':
-                #             p += "<a href='{}'>{}</a>".format(WIKI_URL + p_child['href'], p_child.get_text())
+                #     try:
+                #         if p_child.find('span', class_='mwe-math-element'):
+                #             url = p_child.find('img', class_='mwe-math-fallback-image-inline')['src']
+                #             paragraph += "[<a href='{}'>Формула</a>]".format(url)
                 #         else:
-                #             p += p_child.string + '&nbsp;'
-                #             print(p_child.string + '&nbsp;')
-                # print(p, '\n')
+                #             paragraph += p_child.get_text()
+                #     except:
+                #         paragraph += p_child#.get_text()
+                #
+                # content += '<p>{}</p>'.format(paragraph)#child.get_text())
+                # except:
+                #     print('ne vyshlo')
+                childs = []
+                for p_child in child.children:
+                    childs.append(p_child.name)
+
+                if len(childs) == 2 and childs[0] == 'span':
+                    # print(p_child)
+                    url = child.find('img', class_='mwe-math-fallback-image-inline')
+                    content += "<img src='{}'></img>".format(url['src'])
+                else:
+                    p = ''
+                    for p_child in child.children:
+                        if p_child.name in ['sup', 'span', 'tt']:
+                            if p_child.find('img', class_='mwe-math-fallback-image-inline'):
+                                url = p_child.find('img', class_='mwe-math-fallback-image-inline')['src']
+                                p += "[<a href='{}'>{}</a>]".format(url, LANGUAGES_DICTIONARY['formula'][lang])
+                            else:
+                                p += p_child.get_text()
+                        else:
+                            if p_child.name == 'a':
+                                p += "[<a href='{}'>{}</a>]".format(WIKI_URL + p_child['href'], p_child.get_text())
+                            else:
+                                try:
+                                    p += p_child.string
+                                except:
+                                    print(p_child.string)
+                    content += '<p>{}</p>'.format(p)#child.get_text())
+
 
             #lists
             elif child.name in ['ul', 'ol']:
@@ -95,12 +136,23 @@ def generate_by_wiki_url(url, lang):
                     elif child['class'] in [['thumb', 'tright'], ['thumb', 'tleft']]:
                         try:
                             img_src = 'https:' + child.find('img')['src']
-                            caption = child.find('div', class_='thumbcaption').get_text().strip()
+                            caption = child.find('div', class_='thumbcaption')
 
-                            content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, caption)
+                            thumbcaption = ''
+                            if caption.find('img', class_='mwe-math-fallback-image-inline'):
+                                for capt_child in caption.children:
+                                    try:
+                                        url = capt_child.find('img', class_='mwe-math-fallback-image-inline')['src']
+                                        thumbcaption += "[<a href='{}'>{}</a>]".format(url, LANGUAGES_DICTIONARY['formula'][lang])
+                                    except:
+                                        if 'div' not in capt_child and capt_child.string:
+                                            thumbcaption += capt_child.string
+                            else:
+                                thumbcaption += caption.get_text()
+
+                            content += '<figure><img src={}></img><figcaption>{}</figcaption></figure>'.format(img_src, thumbcaption)
                         except:
                             print('no image')
-
 
 
     content += "<hr></hr><aside>{} <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"\
