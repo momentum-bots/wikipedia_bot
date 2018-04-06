@@ -65,21 +65,6 @@ def generate_by_wiki_url(url, lang):
 
             #paragraphs
             elif child.name == 'p':
-                # try:
-                # paragraph = ''
-                # for p_child in child.children:
-                #     try:
-                #         if p_child.find('span', class_='mwe-math-element'):
-                #             url = p_child.find('img', class_='mwe-math-fallback-image-inline')['src']
-                #             paragraph += "[<a href='{}'>Формула</a>]".format(url)
-                #         else:
-                #             paragraph += p_child.get_text()
-                #     except:
-                #         paragraph += p_child#.get_text()
-                #
-                # content += '<p>{}</p>'.format(paragraph)#child.get_text())
-                # except:
-                #     print('ne vyshlo')
                 childs = []
                 for p_child in child.children:
                     childs.append(p_child.name)
@@ -105,7 +90,7 @@ def generate_by_wiki_url(url, lang):
                                     p += p_child.string
                                 except:
                                     print(p_child.string)
-                    content += '<p>{}</p>'.format(p)#child.get_text())
+                    content += '<p>{}</p>'.format(p)
 
 
             #lists
@@ -159,16 +144,5 @@ def generate_by_wiki_url(url, lang):
                 .format(LANGUAGES_DICTIONARY['created_by'][lang])
 
     new_content = make_pretty(content)
-
-    # page_url, too_big = create_instant_view(new_content, title)
-    # while(too_big):
-    #     telegraph = Telegraph(TELEGRAPH_TOKEN)
-    #     page = telegraph.get_page(page_url.split('/')[-1], return_html=True)['content']
-    #     find = page[::-1][:20][::-1].replace('<', '\n  <')
-    # #     # print(len(content.split(find)))
-    # #     print(find)
-    #
-    #     page_url, too_big = create_instant_view(new_content.split(find)[1], title)
-    #     print(page_url)
 
     return create_instant_view(new_content, title)
