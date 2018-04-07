@@ -13,8 +13,8 @@ from queue import Queue
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    users_controller.add_user(message.chat.id)
-    lang = users_controller.get_lang(message.chat.id)
+    users_controller.add_user(message.from_user.id, username=message.from_user.username)
+    lang = users_controller.get_lang(message.from_user.id)
     text_button = LANGUAGES_DICTIONARY['search'][lang]
     bot.send_message(message.chat.id,
                      LANGUAGES_DICTIONARY['greeting'][lang],
@@ -27,7 +27,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def help(message):
-    users_controller.add_user(message.from_user.id)
+    users_controller.add_user(message.from_user.id, username=message.from_user.username)
     lang = users_controller.get_lang(message.from_user.id)
     bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['help_message'][lang])
     # sleep(3)
@@ -38,13 +38,15 @@ def help(message):
 
 @bot.message_handler(commands=['set_language'])
 def set_lang(message):
-    lang = users_controller.get_lang(message.chat.id)
-    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['set_lang'][lang],
+    users_controller.add_user(message.from_user.id, username=message.from_user.username)
+    lang = users_controller.get_lang(message.from_user.id)
+    bot.send_message(message.from_user.id, LANGUAGES_DICTIONARY['set_lang'][lang],
                      reply_markup=KeyboardManager.set_lang_keyboard())
 
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
+    users_controller.add_user(message.from_user.id, username=message.from_user.username)
     if message.text in LANGUAGES_DICTIONARY['keyboard'].keys():
         users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY['keyboard'][message.text])
         lang = users_controller.get_lang(message.chat.id)
@@ -68,7 +70,7 @@ def echo_all(message):
 
 @bot.inline_handler(func=lambda query: len(query.query) == 0)
 def query_empty_text(query):
-    users_controller.add_user(query.from_user.id)
+    users_controller.add_user(query.from_user.id, username=query.from_user.username)
     lang = users_controller.get_lang(query.from_user.id)
     print('kek')
     r = types.InlineQueryResultArticle(
@@ -83,7 +85,7 @@ def query_empty_text(query):
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
 def query_text(query):
-    users_controller.add_user(query.from_user.id)
+    users_controller.add_user(query.from_user.id, username=query.from_user.username)
     lang = users_controller.get_lang(query.from_user.id)
     articles = []
     buttons = []
