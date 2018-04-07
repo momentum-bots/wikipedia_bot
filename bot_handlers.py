@@ -48,9 +48,12 @@ def echo_all(message):
     if message.text in LANGUAGES_DICTIONARY['keyboard'].keys():
         users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY['keyboard'][message.text])
         lang = users_controller.get_lang(message.chat.id)
+        text_button = LANGUAGES_DICTIONARY['search'][lang]
+        del_message = bot.send_message(message.chat.id, '.', reply_markup=types.ReplyKeyboardRemove())
+        bot.delete_message(message.chat.id, del_message.message_id)
         bot.send_message(message.chat.id,
                          LANGUAGES_DICTIONARY['changed_lang'][lang],
-                         reply_markup=types.ReplyKeyboardRemove())
+                         reply_markup=KeyboardManager.get_search_keyboard(text_button))
     else:
         try:
             lang = users_controller.get_lang(message.from_user.id)
