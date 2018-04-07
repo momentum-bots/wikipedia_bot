@@ -69,10 +69,11 @@ def generate_by_wiki_url(url, lang):
                 for p_child in child.children:
                     childs.append(p_child.name)
 
-                if len(childs) == 2 and childs[0] == 'span':
+                if len(childs) == 2 and child.find('img', class_='mwe-math-fallback-image-inline'):
                     # print(p_child)
                     url = child.find('img', class_='mwe-math-fallback-image-inline')
-                    content += "<img src='{}'></img>".format(url['src'])
+                    if url is not None:
+                        content += "<img src='{}'></img>".format(url['src'])
                 else:
                     p = ''
                     for p_child in child.children:
@@ -81,13 +82,13 @@ def generate_by_wiki_url(url, lang):
                                 url = p_child.find('img', class_='mwe-math-fallback-image-inline')['src']
                                 p += "[<a href='{}'>{}</a>]".format(url, LANGUAGES_DICTIONARY['formula'][lang])
                             else:
-                                p += p_child.get_text()
+                                p += p_child.get_text().replace('<' , '&lt;').replace('>', '&gt;')
                         else:
                             if p_child.name == 'a':
-                                p += "[<a href='{}'>{}</a>]".format(WIKI_URL + p_child['href'], p_child.get_text())
+                                p += "[<a href='{}'>{}</a>]".format(WIKI_URL + p_child['href'], p_child.get_text().replace('<' , '&lt;').replace('>', '&gt;'))
                             else:
                                 try:
-                                    p += p_child.string
+                                    p += p_child.string.replace('<' , '&lt;').replace('>', '&gt;')
                                 except:
                                     print(p_child.string)
                     content += '<p>{}</p>'.format(p)
@@ -143,6 +144,12 @@ def generate_by_wiki_url(url, lang):
     content += "<hr></hr><aside>{} <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"\
                 .format(LANGUAGES_DICTIONARY['created_by'][lang])
 
+    if '<pre>' in content:
+        content = bot_methods.make_code_pretty(content)
+
     new_content = make_pretty(content)
+
+    with open('content.html', 'w') as file:
+        file.write(new_content)
 
     return create_instant_view(new_content, title)
