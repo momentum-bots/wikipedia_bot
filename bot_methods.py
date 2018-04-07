@@ -53,6 +53,13 @@ def get_photo_url(article, lang):
     return WIKI_PHOTO
 
 
+def make_code_pretty(content):
+    new_content = BeautifulSoup(content, 'lxml')
+    for code_section in new_content.find_all('pre'):
+        code_section = str(code_section)[5:][:-6]
+        new_code_section = code_section.replace('<', '&lt;').replace('>', '&gt;')
+        new_content = str(new_content).replace(code_section, new_code_section)
+    return str(new_content)
 
 
 def add_button(article, i, lang, queue):
