@@ -1,8 +1,9 @@
 from db import users_db
 
 
-def add_user(id_, lang='en'):
+def add_user(id_, username=None, lang='en'):
     user = {'id': id_,
+            'username': username,
             'lang': lang
             }
     if users_db.find_one({"id": user['id']}) is None:
