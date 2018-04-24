@@ -28,7 +28,7 @@ WEBHOOK_URL_PATH = "/%s/" % (bot_token)
 Quick'n'dirty SSL certificate generation:
 
 ```bash
-openssl genrsa -out webhook_pkey.pem 2048`
+openssl genrsa -out webhook_pkey.pem 2048
 openssl req -new -x509 -days 3650 -key webhook_pkey.pem -out webhook_cert.pem
 ```
 
