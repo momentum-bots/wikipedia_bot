@@ -6,7 +6,7 @@ def add_user(id_, username=None, lang='en'):
             'username': username,
             'lang': lang
             }
-    if users_db.find_one({"id": user['id']}) is None:
+    if users_db.find_one({"id": user['id']}) is None and users_db.find_one({"username": user['username']}) is None:
         users_db.insert_one(user)
     else:
         return False

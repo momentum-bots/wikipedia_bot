@@ -67,7 +67,7 @@ def add_button(article, i, lang, queue):
                    id=str(i), title=article,
                    #description='test',
                    input_message_content=types.InputTextMessageContent(article),
-                   thumb_url=get_photo_url(article, lang),
+                   #thumb_url=get_photo_url(article, lang),
                    thumb_width=48,
                    thumb_height=48
     ))

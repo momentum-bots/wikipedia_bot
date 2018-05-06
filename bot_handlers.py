@@ -13,8 +13,14 @@ from queue import Queue
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    users_controller.add_user(message.from_user.id, username=message.from_user.username)
-    lang = users_controller.get_lang(message.from_user.id)
+    try:
+        lang = users_controller.get_lang(message.from_user.id)
+    except:
+        lang = 'en'
+
+    users_controller.add_user(message.from_user.id,
+                              username=message.from_user.username,
+                              lang=lang)
     text_button = LANGUAGES_DICTIONARY['search'][lang]
     bot.send_message(message.chat.id,
                      LANGUAGES_DICTIONARY['greeting'][lang],
@@ -27,8 +33,15 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def help(message):
-    users_controller.add_user(message.from_user.id, username=message.from_user.username)
-    lang = users_controller.get_lang(message.from_user.id)
+    try:
+        lang = users_controller.get_lang(message.from_user.id)
+    except:
+        lang = 'en'
+
+    users_controller.add_user(message.from_user.id,
+                              username=message.from_user.username,
+                              lang=lang)
+
     bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['help_message'][lang])
     # sleep(3)
     # bot.send_photo(message.chat.id, open('images/example1.jpg', 'rb'))
@@ -38,15 +51,30 @@ def help(message):
 
 @bot.message_handler(commands=['set_language'])
 def set_lang(message):
-    users_controller.add_user(message.from_user.id, username=message.from_user.username)
-    lang = users_controller.get_lang(message.from_user.id)
+    try:
+        lang = users_controller.get_lang(message.from_user.id)
+    except:
+        lang = 'en'
+
+    users_controller.add_user(message.from_user.id,
+                              username=message.from_user.username,
+                              lang=lang)
+
     bot.send_message(message.from_user.id, LANGUAGES_DICTIONARY['set_lang'][lang],
                      reply_markup=KeyboardManager.set_lang_keyboard())
 
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    users_controller.add_user(message.from_user.id, username=message.from_user.username)
+    try:
+        lang = users_controller.get_lang(message.from_user.id)
+    except:
+        lang = 'en'
+
+    users_controller.add_user(message.from_user.id,
+                              username=message.from_user.username,
+                              lang=lang)
+
     if message.text in LANGUAGES_DICTIONARY['keyboard'].keys():
         users_controller.set_lang(message.chat.id, LANGUAGES_DICTIONARY['keyboard'][message.text])
         lang = users_controller.get_lang(message.chat.id)
@@ -70,8 +98,15 @@ def echo_all(message):
 
 @bot.inline_handler(func=lambda query: len(query.query) == 0)
 def query_empty_text(query):
-    users_controller.add_user(query.from_user.id, username=query.from_user.username)
-    lang = users_controller.get_lang(query.from_user.id)
+    try:
+        lang = users_controller.get_lang(query.from_user.id)
+    except:
+        lang = 'en'
+
+    users_controller.add_user(query.from_user.id,
+                              username=query.from_user.username,
+                              lang=lang)
+
     print('kek')
     r = types.InlineQueryResultArticle(
                 id='1',
@@ -85,8 +120,15 @@ def query_empty_text(query):
 
 @bot.inline_handler(func=lambda query: len(query.query) > 0)
 def query_text(query):
-    users_controller.add_user(query.from_user.id, username=query.from_user.username)
-    lang = users_controller.get_lang(query.from_user.id)
+    try:
+        lang = users_controller.get_lang(query.from_user.id)
+    except:
+        lang = 'en'
+
+    users_controller.add_user(query.from_user.id,
+                              username=query.from_user.username,
+                              lang=lang)
+
     articles = []
     buttons = []
 
