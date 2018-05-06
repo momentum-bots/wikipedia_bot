@@ -9,6 +9,7 @@ from languages import LANGUAGES_DICTIONARY
 from time import sleep
 import threading
 from queue import Queue
+from config import BOT_NAME
 
 
 @bot.message_handler(commands=['start'])
@@ -62,6 +63,11 @@ def set_lang(message):
 
     bot.send_message(message.from_user.id, LANGUAGES_DICTIONARY['set_lang'][lang],
                      reply_markup=KeyboardManager.set_lang_keyboard())
+
+
+@bot.message_handler(commands=['rate'])
+def send_welcome(message):
+    bot.send_message(message.chat.id, 'https://telegram.me/storebot?start={}'.format(BOT_NAME))
 
 
 @bot.message_handler(func=lambda message: True)
