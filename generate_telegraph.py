@@ -20,8 +20,9 @@ def make_pretty(content):
     return new_content
 
 
-def create_instant_view(content, title, too_big=False) :
+def create_instant_view(content, title, bot, uid, too_big=False) :
     telegraph = Telegraph(TELEGRAPH_TOKEN)
+    bot.send_chat_action(uid, 'typing')
 
     try :
         response = telegraph.create_page(title=title, html_content=content)
@@ -30,10 +31,10 @@ def create_instant_view(content, title, too_big=False) :
     except TelegraphException:
         new_content = "<h".join(content.split('<h')[:-1]) + "<br></br><aside>Сделано ботом <br></br><a href ='https://telegram.me/WikipediaTelegraphBot?start=from_telegraph'> @WikipediaTelegraphBot</a></aside>"
         print('too big article')
-        return create_instant_view(make_pretty(new_content), title, too_big=True)
+        return create_instant_view(make_pretty(new_content), title, bot, uid, too_big=True)
 
 
-def generate_by_wiki_url(url, lang):
+def generate_by_wiki_url(url, lang, bot, uid):
     body_content, title = bot_methods.parse_article(url)
 
     content = ''
@@ -149,7 +150,4 @@ def generate_by_wiki_url(url, lang):
 
     new_content = make_pretty(content)
 
-    with open('content.html', 'w') as file:
-        file.write(new_content)
-
-    return create_instant_view(new_content, title)
+    return create_instant_view(new_content, title, bot, uid)

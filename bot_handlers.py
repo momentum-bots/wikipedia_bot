@@ -88,7 +88,8 @@ def echo_all(message):
         try:
             lang = users_controller.get_lang(message.from_user.id)
             url = 'https://{}.wikipedia.org/wiki/'.format(lang) + message.text.replace(' ', '_')
-            response = generate_telegraph.generate_by_wiki_url(url, lang)
+            bot.send_chat_action(message.chat.id, 'typing')
+            response = generate_telegraph.generate_by_wiki_url(url, lang, bot, message.chat.id)
             text_button = LANGUAGES_DICTIONARY['search'][lang]
             bot.send_message(message.chat.id, response, reply_markup=KeyboardManager.get_search_keyboard(text_button))
         except Exception as e:
