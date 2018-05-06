@@ -25,4 +25,5 @@ class KeyboardManager(object):
         keyboard.add(types.KeyboardButton('🇬🇧 English'))
         keyboard.add(types.KeyboardButton('🇺🇦 Українська'))
         keyboard.add(types.KeyboardButton('🇷🇺 Русский'))
+        keyboard.add(types.KeyboardButton('🇹🇷 Türkçe'))
         return keyboard
