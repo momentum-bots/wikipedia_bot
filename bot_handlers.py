@@ -67,7 +67,11 @@ def set_lang(message):
 
 @bot.message_handler(commands=['rate'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, 'https://telegram.me/storebot?start={}'.format(BOT_NAME))
+    try:
+        lang = users_controller.get_lang(message.from_user.id)
+    except:
+        lang = 'en'
+    bot.send_message(message.chat.id, LANGUAGES_DICTIONARY['rate'][lang])
 
 
 @bot.message_handler(func=lambda message: True)

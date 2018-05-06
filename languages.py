@@ -1,3 +1,6 @@
+from config import BOT_NAME
+
+
 LANGUAGES_DICTIONARY = {
     'keyboard': {'🇬🇧 English': 'en',
                  '🇺🇦 Українська': 'uk',
@@ -61,5 +64,10 @@ You can change language of articles anytime  by sending /set_language command to
 Вы можете изменить язык статей в любой момент, отправив боту комманду /set_language.""",
                     'tr': """Bu bot sohbetlerinizde çalışabilir. Bot yeni bir üye olarak sohbete eklemeniz yeterlidir. Sonra bot takma adını: @WikipediaTelegraphBot sorgunuz ile birlikte herhangi bir sohbete yazarak bot arayın. Vikipedi makale ipuçlarının yer aldığı bir panel açılacaktır. Bir öğeye dokunun ve bot sizin için Telegraph sayfasını oluşturacaktır!
 Makalelerin dilini bota /set_language komutunu göndererek istediğiniz zaman değiştirebilirsiniz"""
-                    }
+                    },
+    'rate': {'en': """If you like me, please give 5 stars ⭐️⭐️⭐️⭐️⭐️ rating at: https://telegram.me/storebot?start={}. Have a nice day!""".format(BOT_NAME, BOT_NAME),
+             'uk': """Якщо я тобі подобаюсь, постав, будь ласка, 5 зірочок ⭐️⭐️⭐️⭐️⭐️ рейтингу на: https://telegram.me/storebot?start={}. Гарного дня!""".format(BOT_NAME, BOT_NAME),
+             'ru': """Если я тебе понравился, поставь, пожалуйста, 5 звездочек ⭐️⭐️⭐️⭐️⭐️ рейтинга на: https://telegram.me/storebot?start={}. Хорошего дня!""".format(BOT_NAME, BOT_NAME),
+             'tr': """If you like me, please give 5 stars ⭐️⭐️⭐️⭐️⭐️ rating at: https://telegram.me/storebot?start={}. Have a nice day!""".format(BOT_NAME, BOT_NAME)
+             }
 }
